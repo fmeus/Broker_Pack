@@ -1,0 +1,19 @@
+## Interface: 50300
+## Title: Broker Pack
+## Notes: - Tokens|n- Guild|n- Friends|n- Cash
+## Version: 1.0
+## Author: fmeus
+## X-Category: Interface Enhancements
+## Dependencies:
+## OptionalDeps: 
+## SavedVariables: 
+## Revision: $Id: Broker_Pack.toc 1096 2013-05-22 07:20:35Z fmeus_lgs $
+
+libs\LibStub.lua
+libs\LibDataBroker-1.1.lua
+
+Broker_Cash.lua
+Broker_Guild.lua
+Broker_Friends.lua
+Broker_Tokens.lua
+Broker_Speed.lua
