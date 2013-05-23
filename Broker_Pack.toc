@@ -7,7 +7,6 @@
 ## Dependencies:
 ## OptionalDeps: 
 ## SavedVariables: 
-## Revision: $Id: Broker_Pack.toc 1096 2013-05-22 07:20:35Z fmeus_lgs $
 
 libs\LibStub.lua
 libs\LibDataBroker-1.1.lua

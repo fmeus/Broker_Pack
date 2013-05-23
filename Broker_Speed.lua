@@ -1,11 +1,7 @@
 --[[  
   Project     : Broker Pack
-
   Copyright   : Copyright (c) 2011-2013 Frank Meus. All rights reserved.
-
   Purpose     :
-
-  Revision    : $Id: Broker_Speed.lua 737 2013-01-23 22:11:26Z fmeus_lgs $
 --]]
 
 -- Local variables
