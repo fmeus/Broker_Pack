@@ -1,7 +1,7 @@
-## Interface: 50400
+## Interface: 60000
 ## Title: Broker Pack
 ## Notes: - Tokens|n- Guild|n- Friends|n- Cash
-## Version: 1.2
+## Version: 1.3
 ## Author: fmeus
 ## X-Category: Interface Enhancements
 ## Dependencies:

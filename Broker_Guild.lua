@@ -54,21 +54,8 @@ function f:GUILD_ROSTER_UPDATE( self, event, ... )
             end;
         end;
 
-        local guild_progression = "";
-        if ( GetGuildLevel() < 25 ) then
-            local currentXP, remainingXP = UnitGetGuildXP("player");
-            local progress = string.format( "%.2f", ( currentXP / ( remainingXP + currentXP )*100 ) );
-            local togo = string.format( "%.0f", (remainingXP / 60000 ) );
-            guild_progression = " ["..GetGuildLevel().." - "..progress.."% (~ "..togo..")]";
-        end;
-        ldbGuild.text = GUILD.." ["..onlineMembers.." / "..GetNumGuildMembers( true ).."]"..guild_progression;
+        ldbGuild.text = GUILD.." ["..onlineMembers.." / "..GetNumGuildMembers( true ).."]";
     end;
-end;
-
-
--- Handle changes in guild experience
-function f:GUILD_XP_UPDATE( self, event, ... )
-    f:GUILD_ROSTER_UPDATE();
 end;
 
 
@@ -120,7 +107,6 @@ end;
 
 function f:PLAYER_ENTERING_WORLD()
     if IsInGuild() then
-        QueryGuildXP();
         GuildRoster();
     end;
 end
@@ -138,5 +124,4 @@ f:SetScript( "OnEvent", OnEvent );
 
 -- Register events to listen to
 f:RegisterEvent( "GUILD_ROSTER_UPDATE" );
-f:RegisterEvent( "GUILD_XP_UPDATE" );
 f:RegisterEvent( "PLAYER_ENTERING_WORLD" );
