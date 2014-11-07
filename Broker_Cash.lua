@@ -5,7 +5,7 @@
 --]]
 
 -- Local variables
-local cashStart, cashGain, cashLoss, cashLast, cashGuild = 0, 0, 0, 0, 0;
+local cashStart, cashGain, cashLoss, cashLast = 0, 0, 0, 0;
 local GOLD = GOLD_AMOUNT:gsub("%%d", "%(%%d+%)");
 local SILVER = SILVER_AMOUNT:gsub("%%d", "%(%%d+%)");
 local COPPER = COPPER_AMOUNT:gsub("%%d", "%(%%d+%)");
@@ -74,12 +74,6 @@ function f:CHAT_MSG_MONEY( event, message, sender, language, channelString, targ
         silver = ( silver and tonumber(silver) ) or 0;
         copper = ( copper and tonumber(copper) ) or 0;
         local money = copper + silver * 100 + gold * 10000;
-
-        -- Determine cashflow factor
-        local factor;
-        if ( GetGuildLevel() >= 5 ) then factor = 0.05; end;
-        if ( GetGuildLevel() >= 16 ) then factor = 0.10; end;
-        cashGuild = cashGuild + math.floor( money * factor + 0.5 );
     end;
 end;
 
@@ -98,11 +92,6 @@ function ldbCash_OnEnter( self )
     GameTooltip:AddDoubleLine( "Spent", GetCoinTextureString( cashLoss, 16 ) );
     GameTooltip:AddLine( "|n", 1, 1, 1 );
     GameTooltip:AddDoubleLine( "Cashflow", GetCoinTextureString( abs( cashflow ), 16 ),  fontColor.r, fontColor.g, fontColor.b );
-
-    if ( IsInGuild() ) then
-        GameTooltip:AddLine( "|n"  );
-        GameTooltip:AddDoubleLine( "GB Cashflow", GetCoinTextureString( abs( cashGuild ), 16 ) );
-    end;
     
     GameTooltip:Show();
 end;
