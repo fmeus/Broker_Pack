@@ -1,11 +1,10 @@
 --[[  
   Project     : Broker Pack
-  Copyright   : Copyright (c) 2011-2013 Frank Meus. All rights reserved.
+  Copyright   : Copyright (c) 2011-2014 Frank Meus. All rights reserved.
   Purpose     :
 --]]
 
 -- Local variables
-local onlineMembers = 0;
 local UI_STATUS = { [0] = "", [1] = "<AFK>", [2] = "<DND>" };
 local classFileNames, classes = {}, {};
 
@@ -43,18 +42,9 @@ local ldbGuild = LDB:NewDataObject( "Broker - Guild", {
 -- Handle changes in guild roster
 function f:GUILD_ROSTER_UPDATE( self, event, ... )
     if ( IsInGuild() ) then
-        onlineMembers = 0;
+        local numMembers, onlineMembers, numOnlineAndMobile = GetNumGuildMembers();
 
-        -- Workaround to get online member total
-        for i = 1, GetNumGuildMembers( true ) do 
-            -- get info
-            local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName = GetGuildRosterInfo(i)
-            if ( online ) then
-                onlineMembers = onlineMembers + 1;
-            end;
-        end;
-
-        ldbGuild.text = GUILD.." ["..onlineMembers.." / "..GetNumGuildMembers( true ).."]";
+        ldbGuild.text = GUILD.." ["..numOnlineAndMobile.." / "..numMembers.."]";
     end;
 end;
 
@@ -80,14 +70,23 @@ function ldbGuild_OnEnter( self, motion )
 
         -- Add info to tooltip
         local tLeft, tRight, tTop, tBottom, icon;
-        for i = 1, GetNumGuildMembers( true ) do 
+        local numMembers, onlineMembers, numOnlineAndMobile = GetNumGuildMembers();
+
+        -- Sort by name
+        SortGuildRoster( "name" );
+
+        for i = 1, numOnlineAndMobile do 
             -- get info
-            local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName = GetGuildRosterInfo(i)
+            local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName, achievementPoints, achievementRank, isMobile, canSoR, reputation = GetGuildRosterInfo( i );
             
-            if ( online ) then
+            if ( online or isMobile ) then
                 tLeft, tRight, tTop, tBottom = unpack( CLASS_ICON_TCOORDS[classFileName] );
-                icon = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:14:14:0:0:256:256:"..(tLeft*256)..":"..(tRight*256)..":"..(tTop*256)..":"..(tBottom*256).."|t";
-                GameTooltip:AddDoubleLine( icon.." "..name.." - "..( zone or "??" ),  UI_STATUS[status].." "..level );
+                if ( isMobile ) then
+                    icon = "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-AwayMobile:14:14:0:0:16:16:0:16:0:16|t";
+                else
+                    icon = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:14:14:0:0:256:256:"..(tLeft*256)..":"..(tRight*256)..":"..(tTop*256)..":"..(tBottom*256).."|t";
+                end;
+                GameTooltip:AddDoubleLine( icon.." "..name.." - "..( zone or "??" ), UI_STATUS[status].." "..level );
             end;
         end;
     else
