@@ -1,6 +1,6 @@
 --[[  
   Project     : Broker Pack
-  Copyright   : Copyright (c) 2011-2013 Frank Meus. All rights reserved.
+  Copyright   : Copyright (c) 2011-2014 Frank Meus. All rights reserved.
   Purpose     :
 --]]
 
