@@ -88,9 +88,7 @@ function ldbCash_OnEnter( self )
     GameTooltip:SetPoint( "TOPLEFT", self, "BOTTOMLEFT" );
     GameTooltip:ClearLines();
     GameTooltip:AddLine( "Cashflow|n|n", 1, 1, 1 );
-    GameTooltip:AddDoubleLine( "Gained", GetCoinTextureString( cashGain, 16 ) );
-    GameTooltip:AddDoubleLine( "Spent", GetCoinTextureString( cashLoss, 16 ) );
-    GameTooltip:AddLine( "|n", 1, 1, 1 );
+    GameTooltip:AddDoubleLine( "Gained/Spent", GetCoinTextureString( cashGain, 16 ).." / "..GetCoinTextureString( cashLoss, 16 ) );
     GameTooltip:AddDoubleLine( "Cashflow", GetCoinTextureString( abs( cashflow ), 16 ),  fontColor.r, fontColor.g, fontColor.b );
     
     GameTooltip:Show();
