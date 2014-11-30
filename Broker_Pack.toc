@@ -15,5 +15,4 @@ libs\LibDataBroker-1.1.lua
 Broker_Cash.lua
 Broker_Guild.lua
 Broker_Friends.lua
-Broker_Tokens.lua
 Broker_Speed.lua

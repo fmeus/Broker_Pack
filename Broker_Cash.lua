@@ -9,6 +9,7 @@ local cashStart, cashGain, cashLoss, cashLast = 0, 0, 0, 0;
 local GOLD = GOLD_AMOUNT:gsub("%%d", "%(%%d+%)");
 local SILVER = SILVER_AMOUNT:gsub("%%d", "%(%%d+%)");
 local COPPER = COPPER_AMOUNT:gsub("%%d", "%(%%d+%)");
+local startCurrency, sessionCurrency= {}, {};
 
 
 -- Library stuff
@@ -46,6 +47,16 @@ function f:PLAYER_LOGIN()
 end;
 
 
+-- Handle changes in tokens
+function f:CURRENCY_DISPLAY_UPDATE()
+    for i = 1, GetCurrencyListSize() do
+        local name, _, _, _, _, count = GetCurrencyListInfo( i );
+        startCurrency[name] = ( startCurrency[name] or count );
+        sessionCurrency[name] = count;
+    end;
+end;
+
+
 -- Handle changes in cash
 function f:PLAYER_MONEY( self, event, ... )
     local cashCurrent = GetMoney();
@@ -78,6 +89,12 @@ function f:CHAT_MSG_MONEY( event, message, sender, language, channelString, targ
 end;
 
 
+-- Open currency tab when clicked
+function ldbCash:OnClick( button )
+    ToggleCharacter( "TokenFrame" );
+end;
+
+
 -- Show tooltip
 function ldbCash_OnEnter( self )
     local fontColor = {};
@@ -90,9 +107,27 @@ function ldbCash_OnEnter( self )
     GameTooltip:AddLine( "Cashflow|n|n", 1, 1, 1 );
     GameTooltip:AddDoubleLine( "Gained", GetCoinTextureString( cashGain, 16 ) );
     GameTooltip:AddDoubleLine( "Spent", GetCoinTextureString( cashLoss, 16 ) );
-    GameTooltip:AddDoubleLine( "---------", "--------------------" );
+    GameTooltip:AddDoubleLine( "-------------", "--------------------------" );
     GameTooltip:AddDoubleLine( "Cashflow", GetCoinTextureString( abs( cashflow ), 16 ),  fontColor.r, fontColor.g, fontColor.b );
-    
+
+    -- Add token info to tooltip
+    for i = 1, GetCurrencyListSize() do
+        local name, isHeader, _, _, _, count, icon = GetCurrencyListInfo( i );
+        if ( isHeader ) then
+            GameTooltip:AddLine( "|n"..name, 1.0, 1.0, 1.0 );
+        elseif ( count > 0 ) then
+            local diff = ( sessionCurrency[name] or 0 ) - ( startCurrency[name] or 0 );
+            if ( diff > 0 ) then
+                GameTooltip:AddDoubleLine( "  |T"..icon..":0|t "..name, count.."  (|cFF3366FF+"..diff.."|r)" );
+            elseif ( diff < 0 ) then
+                GameTooltip:AddDoubleLine( "  |T"..icon..":0|t "..name, count.."  (|cFFFF5533"..diff.."|r)" );
+            else
+                GameTooltip:AddDoubleLine( "  |T"..icon..":0|t "..name, count );
+            end;
+        end;
+    end;
+
+    GameTooltip:AddLine( "|n<Left Click> to open/close Currency tab", 0.5, 0.5, 0.5 );
     GameTooltip:Show();
 end;
 
@@ -116,3 +151,4 @@ f:SetScript( "OnEvent", OnEvent );
 -- Register events to listen to
 f:RegisterEvent( "PLAYER_LOGIN" );
 f:RegisterEvent( "CHAT_MSG_MONEY" );
+f:RegisterEvent( "CURRENCY_DISPLAY_UPDATE" );
