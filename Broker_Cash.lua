@@ -115,8 +115,9 @@ function ldbCash_OnEnter( self )
         local name, isHeader, _, _, _, count, icon = GetCurrencyListInfo( i );
         if ( isHeader ) then
             GameTooltip:AddLine( "|n"..name, 1.0, 1.0, 1.0 );
-        elseif ( count > 0 ) then
+        else
             local diff = ( sessionCurrency[name] or 0 ) - ( startCurrency[name] or 0 );
+            if ( count == 0 ) then count = "-"; end;
             if ( diff > 0 ) then
                 GameTooltip:AddDoubleLine( "  |T"..icon..":0|t "..name, count.."  (|cFF3366FF+"..diff.."|r)" );
             elseif ( diff < 0 ) then
