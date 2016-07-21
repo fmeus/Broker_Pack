@@ -1,4 +1,4 @@
-## Interface: 60200
+## Interface: 70000
 ## Title: Broker Pack
 ## Notes: - Tokens|n- Guild|n- Friends|n- Cash
 ## Version: 1.5
